@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Route-Node1": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

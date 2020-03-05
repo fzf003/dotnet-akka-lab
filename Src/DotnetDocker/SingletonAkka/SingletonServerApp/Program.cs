@@ -7,20 +7,19 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using static SingletonServerApp.AkkaExtension;
-
+using ShardNode;
 namespace SingletonServerApp
 {
     class Program
     {
         static  Task Main(string[] args)
         {
-            Console.WriteLine("hello World");
-            
+           
             return  new HostBuilder()
                                 .ConfigureServices(services =>
                                 {
-                                    services.AddAkkaService(isdocker:true)
+                                    services.AddAkkaService("app.conf",isdocker:false)
+                                            .AddHostedService<AkkaHostedService>()
                                             .AddLogging();
 
                                 })

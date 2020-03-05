@@ -11,14 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shard\Common\Common.csproj" />
-    <PackageReference Include="Akka.Cluster.Tools" Version="1.4.0-beta3" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
-    <PackageReference Include="Petabridge.Cmd.Cluster" Version="0.7.0" />
-    <PackageReference Include="Akka.Bootstrap.Docker" Version="0.3.0" />
-
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.2" />
-
   </ItemGroup>
 
 

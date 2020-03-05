@@ -1,0 +1,42 @@
+version: "3.4"
+
+services:
+
+  seednode:
+    image: ${DOCKER_REGISTRY-}seednode
+    build:
+      context: .
+      dockerfile: ./SeedNode/Dockerfile
+    #image: petabridge/lighthouse:latest
+    hostname: seednode
+    ports:
+      - '9300:19600'
+      - '7050:4052'
+    environment:
+      CLUSTER_PORT: 4052
+      CLUSTER_IP: "seednode"
+      CLUSTER_SEEDS: "akka.tcp://actor-system@seednode:4052"
+  
+  routenode1:
+     image: ${DOCKER_REGISTRY-}routenode1
+     build:
+      context: .
+      dockerfile: ./ClusterRoute/Route-Node1/Dockerfile
+     ports:
+       - '0:9110'
+     environment:
+       CLUSTER_SEEDS: "akka.tcp://actor-system@seednode:4052"
+     depends_on:
+       - "seednode"
+
+  routenode2:
+     image: ${DOCKER_REGISTRY-}routenode2
+     build:
+      context: .
+      dockerfile: ./ClusterRoute/Route-Node2/Dockerfile
+     ports:
+       - '0:9110'
+     environment:
+       CLUSTER_SEEDS: "akka.tcp://actor-system@seednode:4052"
+     depends_on:
+      - "seednode"

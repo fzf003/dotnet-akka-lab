@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dotnetakkaserver", "Dotnetakkaserver\Dotnetakkaserver.csproj", "{0410B9E6-F6D0-4499-B15C-3CF3C9F00D96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetakkaserver", "Dotnetakkaserver\Dotnetakkaserver.csproj", "{0410B9E6-F6D0-4499-B15C-3CF3C9F00D96}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShardNode", "ShardNode\ShardNode.csproj", "{ABF39D87-1328-4B9C-B42A-BFA28C1FF01C}"
 EndProject
@@ -19,10 +19,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "SingletonAkka\Sha
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{428A1F79-89C1-4A9A-850E-CCB13C9DDE28}"
 	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
+		docker-compose-ClusterRoute.yml = docker-compose-ClusterRoute.yml
+		docker-compose-ClusterSingleton.yml = docker-compose-ClusterSingleton.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lighthouse", "Lighthouse", "{DBF3176A-6C18-478E-8126-E26F20EBCB20}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shard", "Shard", "{0B2DD358-25D4-4597-AC74-3FC56B2A7967}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClusterRoute", "ClusterRoute", "{3A65A012-EE8C-4210-8C46-FC2674EB6BA3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Route-Node1", "ClusterRoute\Route-Node1\Route-Node1.csproj", "{809240CD-F076-418E-8E14-E7A7447DB44D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Route-Node2", "ClusterRoute\Route-Node2\Route-Node2.csproj", "{B4BFE124-C3FF-4570-BB41-9E019A4564AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{D83E51C1-4A9F-44C2-A4C5-1B4C4F8A86AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkkaPersistence", "Persistence\AkkaPersistence\AkkaPersistence.csproj", "{7956F400-8CD0-4B78-904C-938AFB6265CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,15 +67,31 @@ Global
 		{A72691A2-D7D5-4773-BD15-3884FE609290}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A72691A2-D7D5-4773-BD15-3884FE609290}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A72691A2-D7D5-4773-BD15-3884FE609290}.Release|Any CPU.Build.0 = Release|Any CPU
+		{809240CD-F076-418E-8E14-E7A7447DB44D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{809240CD-F076-418E-8E14-E7A7447DB44D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{809240CD-F076-418E-8E14-E7A7447DB44D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{809240CD-F076-418E-8E14-E7A7447DB44D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4BFE124-C3FF-4570-BB41-9E019A4564AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4BFE124-C3FF-4570-BB41-9E019A4564AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4BFE124-C3FF-4570-BB41-9E019A4564AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4BFE124-C3FF-4570-BB41-9E019A4564AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7956F400-8CD0-4B78-904C-938AFB6265CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7956F400-8CD0-4B78-904C-938AFB6265CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7956F400-8CD0-4B78-904C-938AFB6265CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7956F400-8CD0-4B78-904C-938AFB6265CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{ABF39D87-1328-4B9C-B42A-BFA28C1FF01C} = {0B2DD358-25D4-4597-AC74-3FC56B2A7967}
 		{E74B8B9F-430D-4DBD-BF0F-CEB5734762AD} = {DBF3176A-6C18-478E-8126-E26F20EBCB20}
 		{58EE05AA-47B7-452A-A90F-5DDC85F0758A} = {DA980CD7-0D67-4771-AFC9-245A67623119}
 		{CB0E630F-3708-4BE8-BB71-9117D38A0C22} = {DA980CD7-0D67-4771-AFC9-245A67623119}
-		{A72691A2-D7D5-4773-BD15-3884FE609290} = {DA980CD7-0D67-4771-AFC9-245A67623119}
+		{A72691A2-D7D5-4773-BD15-3884FE609290} = {0B2DD358-25D4-4597-AC74-3FC56B2A7967}
+		{809240CD-F076-418E-8E14-E7A7447DB44D} = {3A65A012-EE8C-4210-8C46-FC2674EB6BA3}
+		{B4BFE124-C3FF-4570-BB41-9E019A4564AD} = {3A65A012-EE8C-4210-8C46-FC2674EB6BA3}
+		{7956F400-8CD0-4B78-904C-938AFB6265CC} = {D83E51C1-4A9F-44C2-A4C5-1B4C4F8A86AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCB869FE-7D11-4A49-BCE4-B0CCD26FA7DA}

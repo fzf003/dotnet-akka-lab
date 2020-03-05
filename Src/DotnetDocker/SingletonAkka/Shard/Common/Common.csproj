@@ -3,14 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Akka" Version="1.4.0-beta3" />
-    <PackageReference Include="Akka.Cluster.Tools" Version="1.4.0-beta3" />
-    <PackageReference Include="Akka.Cluster.Sharding" Version="1.4.0-beta3" />
-
-  </ItemGroup>
-
  
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ShardNode\ShardNode.csproj" />
+  </ItemGroup>
 
 </Project>

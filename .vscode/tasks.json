@@ -1,0 +1,70 @@
+{
+    "tasks": [
+        {
+            "type": "docker-build",
+            "label": "docker-build",
+            "platform": "node",
+            "dockerBuild": {
+                "dockerfile": "${workspaceFolder}/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/Src/DotnetDocker/Dotnetakkaserver/Dotnetakkaserver.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/Src/DotnetDocker/Dotnetakkaserver/Dotnetakkaserver.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "dotnetakkalab:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/Src/DotnetDocker/Dotnetakkaserver/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/Src/DotnetDocker/Dotnetakkaserver/Dotnetakkaserver.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "dotnetakkalab:latest",
+                "dockerfile": "${workspaceFolder}/Src/DotnetDocker/Dotnetakkaserver/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/Src/DotnetDocker/Dotnetakkaserver/Dotnetakkaserver.csproj"
+            }
+        }
+    ]
+}

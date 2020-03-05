@@ -1,42 +1,38 @@
 ﻿using Akka.Actor;
-using Akka.Bootstrap.Docker;
 using Akka.Cluster.Tools.Singleton;
-using Akka.Configuration;
-using Common;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Common.Messages;
 using Microsoft.Extensions.Logging;
-using Petabridge.Cmd.Cluster;
-using Petabridge.Cmd.Host;
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using ShardNode;
 
 namespace SingletonClientApp
 {
-    public class AkkaHostedService : BackgroundService
+    public class AkkaHostedService : AkkaWorker
     {
         private readonly ILogger<AkkaHostedService> _logger;
         private ActorSystem ActorSystem { get; }
-       
-        IActorRef actorRef = Nobody.Instance;
 
-        Akka.Cluster.Cluster cluster;
-        public AkkaHostedService(ActorSystem actorSystem, ILogger<AkkaHostedService> logger)
+        private Akka.Cluster.Cluster cluster;
+        public AkkaHostedService(ActorSystem actorSystem, ILoggerFactory loggerFactory)
+            :base(loggerFactory, actorSystem)
         {
             this.ActorSystem = actorSystem;
 
-            this._logger = logger;
-
-             
+            this._logger = loggerFactory.CreateLogger<AkkaHostedService>();
         }
         public override Task StartAsync(CancellationToken cancellationToken)
         {
            
             cluster = Akka.Cluster.Cluster.Get(ActorSystem);
 
- 
+            cluster.RegisterOnMemberUp(RegisterOnMemberUp);
+
+            cluster.RegisterOnMemberUp(RegisterOnMemberRemoved);
+
+
+
             return base.StartAsync(cancellationToken);
         }
 
@@ -47,18 +43,8 @@ namespace SingletonClientApp
 
             return base.StopAsync(cancellationToken);
         }
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            Console.WriteLine("执行......");
-
-            cluster.RegisterOnMemberUp(RegisterOnMemberUp);
-
-            cluster.RegisterOnMemberUp(RegisterOnMemberRemoved);
-
-            return Task.CompletedTask;
-        }
-
-        public virtual void RegisterOnMemberRemoved()
+ 
+        void RegisterOnMemberRemoved()
         {
             Console.WriteLine(cluster.SelfAddress + "离开.....");
         }
@@ -66,6 +52,7 @@ namespace SingletonClientApp
 
         IActorRef GetClusterSingletonProxy()
         {
+
             Props clusterSingletonProxyProps = ClusterSingletonProxy.Props(
                      singletonManagerPath: "/user/clusterSingletonManager",
                      settings: ClusterSingletonProxySettings.Create(ActorSystem));
@@ -93,14 +80,14 @@ namespace SingletonClientApp
     }
 
 
-    public static class AkkaExtension
+    /*public static class AkkaExtension
     {
  
         public static IServiceCollection AddAkkaService(this IServiceCollection services,bool isdocker=false)
         {
 
             var config = HoconLoader.ParseConfig("app.conf");
-            if(isdocker)
+            /*if(isdocker)
                 config= config.BootstrapFromDocker();
             services.AddSingleton(ActorSystem.Create(config.GetString("akka.MaserServer"), config).StartPbm());
              services.AddHostedService<AkkaHostedService>();
@@ -123,5 +110,5 @@ namespace SingletonClientApp
                 return ConfigurationFactory.ParseString(File.ReadAllText(hoconPath));
             }
         }
-    }
+    }*/
 }
