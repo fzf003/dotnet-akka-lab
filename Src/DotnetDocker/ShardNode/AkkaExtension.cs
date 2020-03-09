@@ -26,6 +26,7 @@ namespace ShardNode
             var pbm = PetabridgeCmd.Get(actorSystem);
             pbm.RegisterCommandPalette(ClusterCommands.Instance);
             pbm.RegisterCommandPalette(RemoteCommands.Instance);
+            pbm.RegisterCommandPalette(Petabridge.Cmd.Cluster.Sharding.ClusterShardingCommands.Instance);
             pbm.Start();
             return actorSystem;
         }
