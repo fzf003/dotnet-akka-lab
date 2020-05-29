@@ -1,23 +1,26 @@
 ﻿using Akka.Actor;
-using Akka.Routing;
-using Common.Messages;
+using AkkaTcpClient.Actors;
 using Microsoft.Extensions.Logging;
 using ShardNode;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static AkkaTcpClient.Actors.ClientService;
 
-namespace Route_Node2
+namespace AkkaTcpClient
 {
     public class AkkaHostedService : AkkaWorker
     {
         Akka.Cluster.Cluster cluster;
-        public AkkaHostedService(ILoggerFactory loggerFactory, ActorSystem actorRefFactory) 
+
+        IActorRef clientserviceref;
+        public AkkaHostedService(ILoggerFactory loggerFactory, ActorSystem actorRefFactory)
             : base(loggerFactory, actorRefFactory)
         {
-            
+
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -26,29 +29,28 @@ namespace Route_Node2
 
             cluster.RegisterOnMemberUp(() => {
 
-                var foorouter = actorSystem.ActorOf(Props.Empty.WithRouter(FromConfig.Instance), "PubActor");
+                clientserviceref = actorSystem.ActorOf(Props.Create(() => new ClientService()), "echo-client");
 
-                this.actorSystem.Scheduler.Advanced.ScheduleRepeatedly(TimeSpan.Zero, TimeSpan.FromMilliseconds(1000), () => {
-
-                    foorouter.Ask<HelloResponse>(new Hello(Guid.NewGuid().ToString()))
-                    .ContinueWith(tr => {
-                        if (tr.IsCompletedSuccessfully)
-                            Console.WriteLine($"Response：{tr.Result?.Message}");
-                    });
-
+                actorSystem.Scheduler.Advanced.ScheduleRepeatedly(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), () =>
+                {
+                    clientserviceref.Tell(new SendMessage(Guid.NewGuid().ToString("N")));
                 });
-            });
-
-            cluster.RegisterOnMemberUp(() => {
 
             });
 
-            
+            cluster.RegisterOnMemberRemoved(() =>
+            {
+                clientserviceref.Tell(StopMessage.Instance);
+            });
+
+
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
+           
+
             cluster.Leave(cluster.SelfAddress);
 
             return base.StopAsync(cancellationToken);

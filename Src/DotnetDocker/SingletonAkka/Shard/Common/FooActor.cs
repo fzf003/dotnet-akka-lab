@@ -2,8 +2,10 @@
 using Akka.Cluster;
 using Akka.Event;
 using Akka.Routing;
+using Common.Messages;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 namespace Common
 {
@@ -27,7 +29,13 @@ namespace Common
             
             this.Receive<Messages.Hello>(p => {
 
-                Console.WriteLine($"{p.Message}");
+                _log.Info($"{p.Message}");
+                Sender?.Tell(Enumerable.Range(1, 30)
+                       .Select(x => new HelloResponse($"{Self.Path.ToString()}-{p.Message}"))
+                       .ToList());
+
+                //Sender?.Tell(new HelloResponse($"{Self.Path.ToString()}-{p.Message}"));
+
              });
         }
     }

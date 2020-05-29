@@ -14,11 +14,15 @@ namespace SingletonClientApp
         private readonly ILogger<AkkaHostedService> _logger;
         private ActorSystem ActorSystem { get; }
 
+        readonly IClusterService clusterService;
+
         private Akka.Cluster.Cluster cluster;
-        public AkkaHostedService(ActorSystem actorSystem, ILoggerFactory loggerFactory)
+        public AkkaHostedService(ActorSystem actorSystem, ILoggerFactory loggerFactory, IClusterService clusterService)
             :base(loggerFactory, actorSystem)
         {
             this.ActorSystem = actorSystem;
+
+            this.clusterService = clusterService;
 
             this._logger = loggerFactory.CreateLogger<AkkaHostedService>();
         }
@@ -39,9 +43,12 @@ namespace SingletonClientApp
         public override Task StopAsync(CancellationToken cancellationToken)
         {
 
+           
+
             cluster.Leave(cluster.SelfAddress);
 
-            return base.StopAsync(cancellationToken);
+            return   CoordinatedShutdown.Get(ActorSystem).Run(CoordinatedShutdown.ClrExitReason.Instance);
+            //base.StopAsync(cancellationToken);
         }
  
         void RegisterOnMemberRemoved()
@@ -58,7 +65,7 @@ namespace SingletonClientApp
                      settings: ClusterSingletonProxySettings.Create(ActorSystem));
 
             var proxy = ActorSystem.ActorOf(clusterSingletonProxyProps, name: "consumerProxy");
-
+            
             return proxy;
         }
 
@@ -66,15 +73,22 @@ namespace SingletonClientApp
         {
             Console.WriteLine(cluster.SelfAddress + "上线.....");
           
-            var proxy= GetClusterSingletonProxy();
+            //var proxy=GetClusterSingletonProxy();
             
-            ActorSystem.Scheduler.Advanced.ScheduleRepeatedly(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), () =>
+           /* ActorSystem.Scheduler.Advanced.ScheduleRepeatedly(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), () =>
             {
                  var message = new Hello(DateTime.Now.ToString());
-                proxy.Tell(message);
-                Console.WriteLine("Send:{0}", message.Message);
+                //proxy.Tell(message);
+                this.clusterService.ResponseAsync(message)
+                .ContinueWith(t => {
+                   if(t.IsCompletedSuccessfully)
+                    {
+                        Console.WriteLine("HelloResponse:{0}",t.Result?.Message);
+                    }
+                });
+                //Console.WriteLine("Send:{0}", message.Message);
                  
-             });
+             });*/
 
         }
     }

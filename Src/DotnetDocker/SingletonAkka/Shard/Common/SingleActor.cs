@@ -13,6 +13,7 @@ namespace Common
         {
             Receive<Messages.Hello>(hello =>
             {
+                Sender?.Tell(new Messages.HelloResponse( string.Format("SingleActor:[{0}]===Hello-- {1}", this.Self, hello.Message)));
                 Console.WriteLine("SingleActor:[{0}]===Hello-- {1}", this.Self, hello.Message);
             });
 

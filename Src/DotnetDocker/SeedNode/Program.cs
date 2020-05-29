@@ -12,7 +12,7 @@ namespace SeedNode
             return new HostBuilder()
                                 .ConfigureServices(services =>
                                 {
-                                    services.AddAkkaService("app.conf",true)
+                                    services.AddAkkaService("app.conf",false)
                                             .AddHostedService<AkkaHostedService>();
                                  })
                                 .RunConsoleAsync();
