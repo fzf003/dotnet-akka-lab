@@ -13,30 +13,24 @@ namespace PubClusterClientApp
         {
 
             var config = ConfigurationFactory.ParseString(File.ReadAllText("app.conf"));
- 
+
             ActorSystem system = ActorSystem.Create(config.GetString("akka.MaserServer"), config);
-           
+
             var client = system.ActorOf<ClusterClientSendActor>();
 
 
-            for (; ; )
+            system.Scheduler.Advanced.ScheduleRepeatedly(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(1), () =>
             {
-  
-                system.Scheduler.Advanced.ScheduleRepeatedly(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(1), () =>
-                {
-                   
-                    client.Tell(new PubSubShardMessage.Ping(Guid.NewGuid().ToString("N")));
-                });
 
-  
-                Console.ReadKey();
-            }
+                client.Tell(new PubSubShardMessage.Ping(Guid.NewGuid().ToString("N")));
+            });
+
+
+            Console.ReadKey();
+
 
         }
     }
 
-    public sealed class TellPublish {
-        private TellPublish() { }
-        public static TellPublish Instance = new TellPublish();
-    }
+   
 }
