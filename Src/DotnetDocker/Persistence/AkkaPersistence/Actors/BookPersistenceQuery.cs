@@ -32,6 +32,7 @@ namespace AkkaPersistence.Actors
             this.Receive<Start>(p => {
 
                 var reader = actorSystem.ReadJournalFor<SqlReadJournal>(SqlReadJournal.Identifier);
+              
 
                 reader.EventsByPersistenceId($"book-{bookid}", 0, long.MaxValue)
                       .RunForeach(p =>

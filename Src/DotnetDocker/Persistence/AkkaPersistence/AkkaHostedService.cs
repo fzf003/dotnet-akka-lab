@@ -51,10 +51,10 @@ namespace AkkaPersistence
             return Task.CompletedTask;
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public override async Task StopAsync(CancellationToken cancellationToken)
         {
 
-            return actorSystem.Terminate();
+            await actorSystem.Terminate();
         }
     }
 }

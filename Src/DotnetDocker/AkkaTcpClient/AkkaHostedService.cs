@@ -31,7 +31,7 @@ namespace AkkaTcpClient
 
                 clientserviceref = actorSystem.ActorOf(Props.Create(() => new ClientService()), "echo-client");
 
-                actorSystem.Scheduler.Advanced.ScheduleRepeatedly(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), () =>
+                actorSystem.Scheduler.Advanced.ScheduleRepeatedly(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(100), () =>
                 {
                     clientserviceref.Tell(new SendMessage(Guid.NewGuid().ToString("N")));
                 });

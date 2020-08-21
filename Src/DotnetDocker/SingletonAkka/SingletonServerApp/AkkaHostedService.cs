@@ -12,6 +12,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ShardNode;
+using Akka.Cluster.Discovery;
 
 namespace SingletonServerApp
 {
@@ -30,7 +31,7 @@ namespace SingletonServerApp
 
 
         }
-        public override Task StartAsync(CancellationToken cancellationToken)
+        public override  Task StartAsync(CancellationToken cancellationToken)
         {
 
             cluster = Akka.Cluster.Cluster.Get(ActorSystem);
@@ -39,17 +40,17 @@ namespace SingletonServerApp
 
             cluster.RegisterOnMemberUp(RegisterOnMemberRemoved);
 
+             ClusterDiscovery.Join(ActorSystem);
 
-
-            return base.StartAsync(cancellationToken);
+             return base.StartAsync(cancellationToken);
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public override async Task StopAsync(CancellationToken cancellationToken)
         {
 
             cluster.Leave(cluster.SelfAddress);
 
-            return base.StopAsync(cancellationToken);
+            await base.StopAsync(cancellationToken);
         }
 
 
@@ -68,8 +69,8 @@ namespace SingletonServerApp
                                      settings: ClusterSingletonManagerSettings.Create(ActorSystem));
 
 
-            var singlet = ActorSystem.ActorOf(clusterSingletonManagerProps, name: "clusterSingletonManager");
-            Console.WriteLine("clusterSingletonManager:{0}", singlet.Path.ToString());
+            var singlet = ActorSystem.ActorOf(clusterSingletonManagerProps, name: "singletonManager");
+            Console.WriteLine("singletonManager:{0}", singlet.Path.ToString());
 
 
 

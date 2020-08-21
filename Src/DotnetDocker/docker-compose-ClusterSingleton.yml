@@ -10,7 +10,7 @@ services:
     #image: petabridge/lighthouse:latest
     hostname: seednode
     ports:
-      - '9200:19600'
+      - '19200:19600'
       - '7053:4053'
     environment:
       CLUSTER_PORT: 4053
@@ -41,4 +41,5 @@ services:
        #CLUSTER_PORT: 6500
        CLUSTER_SEEDS: "akka.tcp://actor-system@seednode:4053"
      depends_on:
-      - "seednode"
+       - "seednode"
+       - "singletonserver"

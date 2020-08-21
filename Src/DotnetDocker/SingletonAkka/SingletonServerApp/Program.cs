@@ -18,7 +18,7 @@ namespace SingletonServerApp
             return  new HostBuilder()
                                 .ConfigureServices(services =>
                                 {
-                                    services.AddAkkaService("app.conf",isdocker:true)
+                                    services.AddAkkaService("app.conf",isdocker:false)
                                             .AddHostedService<AkkaHostedService>()
                                             .AddLogging();
 

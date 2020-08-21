@@ -39,6 +39,10 @@ namespace AkkaTcpServer.Actors
                 logger.Info("远程连接已关闭 [{0}] ", remote);
                 Context.Stop(Self);
             });
+
+            ReceiveAny(p => {
+                logger.Info("远程连接发送命令 [{0}] ", p);
+            });
         }
 
  

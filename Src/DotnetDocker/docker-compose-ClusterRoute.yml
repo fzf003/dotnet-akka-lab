@@ -10,12 +10,15 @@ services:
     #image: petabridge/lighthouse:latest
     hostname: seednode
     ports:
-      - '9300:19600'
+      - '19300:19600'
       - '7050:4052'
     environment:
       CLUSTER_PORT: 4052
       CLUSTER_IP: "seednode"
       CLUSTER_SEEDS: "akka.tcp://actor-system@seednode:4052"
+    restart: on-failure
+  
+
   
   routenode1:
      image: ${DOCKER_REGISTRY-}routenode1
@@ -28,6 +31,8 @@ services:
        CLUSTER_SEEDS: "akka.tcp://actor-system@seednode:4052"
      depends_on:
        - "seednode"
+     restart: on-failure
+ 
 
   routenode2:
      image: ${DOCKER_REGISTRY-}routenode2
@@ -40,3 +45,7 @@ services:
        CLUSTER_SEEDS: "akka.tcp://actor-system@seednode:4052"
      depends_on:
       - "seednode"
+     restart: on-failure
+ 
+
+ 

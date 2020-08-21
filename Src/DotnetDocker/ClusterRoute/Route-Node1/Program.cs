@@ -17,7 +17,7 @@ namespace Route_Node1
                                           .AddHostedService<AkkaHostedService>()
                                           .AddLogging();
 
-                              })
+                              }) 
                              .RunConsoleAsync();
         }
     }

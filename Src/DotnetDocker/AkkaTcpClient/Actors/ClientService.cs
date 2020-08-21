@@ -16,7 +16,7 @@ namespace AkkaTcpClient.Actors
         readonly IPAddress _iPAddress;
         readonly int _prot;
 
-        public ClientService() : this(IPAddress.Loopback, 9001) { }
+        public ClientService() : this(IPAddress.Loopback, 9988) { }
         public ClientService(IPAddress ipAddress,int prot)
         {
             this._iPAddress = ipAddress;
@@ -88,7 +88,7 @@ namespace AkkaTcpClient.Actors
             readonly string _message;
             public SendMessage(string message)
             {
-                this._message = message;
+                this._message = message+"\0";
             }
 
             public string Message

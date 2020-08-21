@@ -12,7 +12,7 @@ namespace ShardNode
 {
     public static class AkkaExtension
     {
-        public static IServiceCollection AddAkkaService(this IServiceCollection services,string  configfile,bool isdocker=false)
+        public static IServiceCollection AddAkkaService(this IServiceCollection services, string configfile, bool isdocker = false)
         {
             var config = HoconLoader.ParseConfig(configfile);
             if (isdocker)
@@ -30,6 +30,52 @@ namespace ShardNode
             pbm.Start();
             return actorSystem;
         }
+
+
+        public static IServiceCollection AddActorReference<TActor>(
+          this IServiceCollection builder, IActorRef actorReference)
+          where TActor : ActorBase
+        {
+            var actorRef = new ActorRefProvider<TActor>(actorReference);
+
+            builder.AddSingleton<ActorRefProvider<TActor>>(actorRef);
+            return builder;
+        }
+
+        public static IServiceCollection AddActorReference<TActor>(
+           this IServiceCollection builder, Props actorProps)
+           where TActor : ActorBase
+        {
+
+            builder.AddSingleton<ActorRefProvider<TActor>>(provider =>
+            {
+                var system = provider.GetService<ActorSystem>();
+
+                var actorRef = new ActorRefProvider<TActor>(system.ActorOf(actorProps));
+
+                return actorRef;
+            });
+
+            return builder;
+        }
+
+        public static IServiceCollection AddActorReference<TActor>(
+          this IServiceCollection builder, Func<IServiceProvider, Props> actionProvider)
+          where TActor : ActorBase
+        {
+
+            builder.AddSingleton<ActorRefProvider<TActor>>(provider =>
+            {
+                var system = provider.GetService<ActorSystem>();
+                var actorProps = actionProvider(provider);
+                var actorRef = new ActorRefProvider<TActor>(system.ActorOf(actorProps));
+
+                return actorRef;
+            });
+            return builder;
+        }
+
+
 
         public static class HoconLoader
         {

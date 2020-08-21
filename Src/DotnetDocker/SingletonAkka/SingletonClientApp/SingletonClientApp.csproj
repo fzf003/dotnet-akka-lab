@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shard\Common\Common.csproj" />
+    <PackageReference Include="Akka.Cluster.Discovery.Consul" Version="0.3.0" />
   </ItemGroup>
 
 
