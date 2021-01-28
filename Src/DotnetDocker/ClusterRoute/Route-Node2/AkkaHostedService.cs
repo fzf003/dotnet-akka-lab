@@ -4,8 +4,6 @@ using Common.Messages;
 using Microsoft.Extensions.Logging;
 using ShardNode;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,9 +26,11 @@ namespace Route_Node2
 
                 var foorouter = actorSystem.ActorOf(Props.Empty.WithRouter(FromConfig.Instance), "PubActor");
 
+            
+                int i = 0;
                 this.actorSystem.Scheduler.Advanced.ScheduleRepeatedly(TimeSpan.Zero, TimeSpan.FromMilliseconds(1000), () => {
-
-                    foorouter.Ask<HelloResponse>(new Hello(Guid.NewGuid().ToString()))
+                    i++;
+                    foorouter.Ask<HelloResponse>(new Hello(i.ToString()))
                     .ContinueWith(tr => {
                         if (tr.IsCompletedSuccessfully)
                             Console.WriteLine($"Response：{tr.Result?.Message}");

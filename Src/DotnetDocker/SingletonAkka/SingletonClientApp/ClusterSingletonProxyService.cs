@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Cluster.Tools.Singleton;
+using Akka.DependencyInjection;
 using Common.Messages;
 using System;
 using System.Collections.Generic;
@@ -9,10 +10,10 @@ namespace SingletonClientApp
 {
     public class ClusterSingletonProxyService : ReceiveActor
     {
-        public static Props ForProps()
+        public static Props ForProps(ActorSystem actorSystem)
         {
-            return Props.Create<ClusterSingletonProxyService>();
-                        //.WithRouter(new Akka.Routing.RoundRobinPool(5));
+            return ServiceProvider.For(actorSystem).Props<ClusterSingletonProxyService>();
+                                  //.WithRouter(new Akka.Routing.RoundRobinPool(5));
         }
 
         IActorRef _ClusterSingletonClient;

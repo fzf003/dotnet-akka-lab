@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Cluster.Tools.Singleton;
+using Akka.DependencyInjection;
 using Common.Messages;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,8 @@ namespace SingletonClientApp
 
         public ClusterService(ActorSystem ActorSystem)
         {
-            this._ClusterSingletonClient = ActorSystem.ActorOf(ClusterSingletonProxyService.ForProps(),"Proxy");
+            
+            this._ClusterSingletonClient = ActorSystem.ActorOf(ClusterSingletonProxyService.ForProps(ActorSystem),"Proxy");
         }
 
         public Task<HelloResponse> ResponseAsync(Hello message)

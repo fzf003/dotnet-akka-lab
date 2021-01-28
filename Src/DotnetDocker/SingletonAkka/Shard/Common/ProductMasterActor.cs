@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Akka.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,8 @@ namespace Common
 
         private IActorRef StartChild(string productId)
         {
-            return Context.ActorOf(Props.Create(() => new ProductActor(productId)), productId);
+            var props=ServiceProvider.For(Context.System).Props<ProductActor>(productId);
+            return Context.ActorOf(props, productId);
         }
     }
 

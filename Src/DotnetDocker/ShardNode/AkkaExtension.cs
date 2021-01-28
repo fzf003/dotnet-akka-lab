@@ -7,6 +7,7 @@ using Petabridge.Cmd.Host;
 using Petabridge.Cmd.Remote;
 using System;
 using System.IO;
+using Akka.DependencyInjection;
 
 namespace ShardNode
 {
@@ -17,9 +18,18 @@ namespace ShardNode
             var config = HoconLoader.ParseConfig(configfile);
             if (isdocker)
                 config = config.BootstrapFromDocker();
-            services.AddSingleton(ActorSystem.Create(config.GetString("akka.MaserServer"), config).StartPbm());
+
+            services.AddSingleton(provider =>
+            {
+                var bootstrap = BootstrapSetup.Create().WithConfig(config);
+                var di = ServiceProviderSetup.Create(provider);
+                var actorSystemSetup = bootstrap.And(di);
+
+                return ActorSystem.Create(config.GetString("akka.MaserServer"), actorSystemSetup).StartPbm();
+            });
             return services;
         }
+
 
         private static ActorSystem StartPbm(this ActorSystem actorSystem)
         {
@@ -74,6 +84,7 @@ namespace ShardNode
             });
             return builder;
         }
+
 
 
 

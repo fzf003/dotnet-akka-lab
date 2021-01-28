@@ -13,12 +13,12 @@ namespace Route_Node2
             return new HostBuilder()
                              .ConfigureServices(services =>
                              { 
-                                 services.AddAkkaService("app.conf", isdocker: true)
+                                 services.AddAkkaService("app.conf")
                                          .AddHostedService<AkkaHostedService>()
                                          .AddLogging();
 
                              })
-                            .RunConsoleAsync();
+                            .Build().RunAsync();
         }
     }
 }

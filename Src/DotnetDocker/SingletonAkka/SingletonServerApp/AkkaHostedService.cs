@@ -1,13 +1,7 @@
 ﻿using Akka.Actor;
-using Akka.Bootstrap.Docker;
 using Akka.Cluster.Tools.Singleton;
-using Akka.Configuration;
 using Common;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Petabridge.Cmd.Cluster;
-using Petabridge.Cmd.Host;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +32,7 @@ namespace SingletonServerApp
 
             cluster.RegisterOnMemberUp(RegisterOnMemberUp);
 
-            cluster.RegisterOnMemberUp(RegisterOnMemberRemoved);
+            cluster.RegisterOnMemberRemoved(RegisterOnMemberRemoved);
 
              ClusterDiscovery.Join(ActorSystem);
 
@@ -64,7 +58,7 @@ namespace SingletonServerApp
             Console.WriteLine(cluster.SelfAddress + "上线.....");
 
             var clusterSingletonManagerProps = ClusterSingletonManager.Props(
-                                     singletonProps: SingleActor.CreateProps().WithRouter(new Akka.Routing.RoundRobinPool(5)),
+                                     singletonProps: SingleActor.CreateProps(this.actorSystem).WithRouter(new Akka.Routing.RoundRobinPool(5)),
                                      terminationMessage: PoisonPill.Instance,
                                      settings: ClusterSingletonManagerSettings.Create(ActorSystem));
 

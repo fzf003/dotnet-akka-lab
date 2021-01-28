@@ -30,7 +30,7 @@ namespace Common
             this.Receive<Messages.Hello>(p => {
 
                 _log.Info($"{p.Message}");
-                Sender?.Tell(Enumerable.Range(1, 30)
+                Sender?.Tell(Enumerable.Range(1, 3)
                        .Select(x => new HelloResponse($"{Self.Path.ToString()}-{p.Message}"))
                        .ToList());
 

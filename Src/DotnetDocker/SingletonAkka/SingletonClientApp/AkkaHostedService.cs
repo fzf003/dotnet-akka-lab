@@ -34,7 +34,7 @@ namespace SingletonClientApp
 
             cluster.RegisterOnMemberUp(RegisterOnMemberUp);
 
-            cluster.RegisterOnMemberUp(RegisterOnMemberRemoved);
+            cluster.RegisterOnMemberRemoved(RegisterOnMemberRemoved);
 
             ClusterDiscovery.Join(ActorSystem);
 

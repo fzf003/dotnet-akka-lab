@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Akka.DI.Core;
+using Common.Services;
 
 namespace Route_Node1
 {
@@ -26,13 +28,14 @@ namespace Route_Node1
             cluster = Akka.Cluster.Cluster.Get(this.actorSystem);
 
             cluster.RegisterOnMemberUp(()=> {
-
+                ;
                 var foo = actorSystem.ActorOf(FooActor.Props(), "FooActor");
+
+                var artileServer = actorSystem.ActorOf(ArticleWorkerActor.For(actorSystem), "artileServer");
+                
             });
 
-            cluster.RegisterOnMemberUp(()=> {
             
-            });
             
             return base.StartAsync(cancellationToken);
         }

@@ -30,7 +30,7 @@ namespace ClusterSharding_ClientNode
 
             cluster.RegisterOnMemberUp(RegisterOnMemberUp);
 
-            cluster.RegisterOnMemberUp(RegisterOnMemberRemoved);
+            cluster.RegisterOnMemberRemoved(RegisterOnMemberRemoved);
 
 
             return base.StartAsync(cancellationToken);

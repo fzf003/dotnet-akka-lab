@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AkkaTcpServer": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

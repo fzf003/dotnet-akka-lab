@@ -1,12 +1,15 @@
 ﻿using System;
 using Akka.Actor;
+using Akka.DependencyInjection;
+
 namespace Common
 {
     public class SingleActor : ReceiveActor
     {
-        public static Props CreateProps()
+        public static Props CreateProps(ActorSystem actorSystem)
         {
-            return Props.Create(() => new SingleActor());
+            return ServiceProvider.For(actorSystem).Props<SingleActor>();
+            // Props.Create(() => new SingleActor());
         }
 
         public SingleActor()
